@@ -3,15 +3,16 @@ const router = express.Router();
 const Product = require('../models/product')
 const mongoose = require('mongoose') 
 
+// add data to database
 router.post('/', (req, res, next) => {
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
-        testId: req.body.testId,
-        testType: req.body.testType,
-        name: req.body.name
+        regNo: req.body.regNo,
+        hospitalName: req.body.hName,
+        password: req.body.password
     });
     product.save().then(result => {
-        console.log("updated record in db: "+result);
+
         res.status(201).json({
         message: "handling post methods",
         product: product,
@@ -28,10 +29,10 @@ router.post('/', (req, res, next) => {
 });
 
 
-router.get('/:testId', (req, res, next) => {
-    const id = req.params.testId;
-    Product.findById(id)
-    .select('_id testType testId name')
+router.get('/:regNo', (req, res, next) => {
+    const regNo = req.params.regNo;
+    Product.find({ 'regNo': regNo})
+    .select('_id regNo hospitalName password')
     .exec()
     .then(doc =>{
         if(doc) {
@@ -57,22 +58,22 @@ router.get('/:testId', (req, res, next) => {
 });
 
 router.get('/', (req, res, next) => {
-    const id = req.params.testId;
+    const regNo = req.params.regNo;
     Product.find()
-    .select('_id testType testId name')
+    .select('_id regNo hospitalName password')
     .exec()
     .then(docs =>{
         if(docs) {
             res.status(200).json({
                 records: docs.map( doc => {
                     return {
-                        testId:doc.testId,
-                        testType:doc.testType,
-                        recordId:doc._id,
-                        name:doc.name,
+                        _id:doc._id,
+                        regNo:doc.regNo,
+                        hName:doc.hospitalName,
+                        pass:doc.password,
                         meta: {
                             methodType: 'Get',
-                            url: 'http://localhost:3000/test/' + doc._id,
+                            url: 'http://localhost:3000/hqs/' + doc.regNo,
                             dbType: 'Mongo cloud'
                         }
                     }
@@ -97,9 +98,9 @@ router.get('/', (req, res, next) => {
     });
 });
 
-router.delete('/:testId', (req, res, next) => {
-    const id = req.params.testId;
-    Product.findByIdAndRemove(id)
+router.delete('/:regNo', (req, res, next) => {
+    const regNo = req.params.regNo;
+    Product.findOneAndRemove({ 'regNo': regNo})
     .exec()
     .then(result => {
         res.status(200).json({
@@ -114,13 +115,13 @@ router.delete('/:testId', (req, res, next) => {
         })
     })
 });
-router.patch('/:testId', (req, res, next) => {
-    const id = req.params.testId;
+router.patch('/:regNo', (req, res, next) => {
+    const regNo = req.params.regNo;
     const updateOps = {};
     for(const ops of req.body) {
         updateOps[ops.name] = ops.value
     }
-    Product.findByIdAndUpdate({_id: id},{$set: updateOps})
+    Product.findOneAndUpdate({regNo: regNo},{$set: updateOps})
     .exec()
     .then(result => {
         res.status(200).json({

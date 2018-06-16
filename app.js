@@ -23,8 +23,8 @@ app.use((req,res,next) => {
 });
 
 //maintain all routes here
-const testRoutes = require('./apis/routes/test')
-app.use('/test', testRoutes);
+const testRoutes = require('./apis/routes/hqs')
+app.use('/hqs', testRoutes);
 
 // if not found any api
 app.use((req, res, next)=> {
