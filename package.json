@@ -1,17 +1,17 @@
 {
-  "name": "rest-shop",
+  "name": "hqs",
   "version": "1.0.0",
-  "description": "a project for hopistal que",
-  "main": "index.js",
+  "description": "Hospital Queuing System",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon ./js/server.js"
   },
   "keywords": [
     "hopital",
-    "que"
+    "queuing",
+    "hospital queuing system"
   ],
-  "author": "anil M V",
+  "author": "Anil M V",
   "license": "ISC",
   "dependencies": {
     "@angular/cli": "^6.0.7",
